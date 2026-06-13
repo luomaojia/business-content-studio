@@ -36,6 +36,14 @@
 
 线上部署通过 Netlify Function `/api/generate-content` 转发请求，避免浏览器跨域限制。
 
+### LLM API providers
+
+页面内置三个选项：
+
+- `DeepSeek`：自动填入 `https://api.deepseek.com/chat/completions` 和 `deepseek-v4-flash`，默认使用 `Authorization: Bearer <API Key>`。
+- `MiMo`：自动填入 `https://api.xiaomimimo.com/v1/chat/completions` 和 `mimo-v2.5-pro`，默认使用 `api-key: <API Key>`。
+- `自定义兼容接口`：适合 OpenAI Chat Completions 兼容网关，必要时可在高级设置里补充 JSON 请求头。
+
 ## 多语言
 
 页面顶部可切换语言，当前支持：

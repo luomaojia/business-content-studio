@@ -18,10 +18,22 @@ type Offer = {
 };
 
 type LlmSettings = {
+  provider?: 'custom' | 'deepseek' | 'mimo';
   endpoint: string;
   model: string;
   apiKey: string;
   extraHeaders?: string;
+};
+
+const providerDefaults: Record<'deepseek' | 'mimo', Pick<LlmSettings, 'endpoint' | 'model'>> = {
+  deepseek: {
+    endpoint: 'https://api.deepseek.com/chat/completions',
+    model: 'deepseek-v4-flash',
+  },
+  mimo: {
+    endpoint: 'https://api.xiaomimimo.com/v1/chat/completions',
+    model: 'mimo-v2.5-pro',
+  },
 };
 
 type LocaleCode = 'zh-CN' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'pt' | 'ar';
@@ -67,6 +79,36 @@ function parseExtraHeaders(value = '') {
       .filter(([, headerValue]) => typeof headerValue === 'string')
       .map(([headerName, headerValue]) => [headerName, headerValue as string]),
   );
+}
+
+function normalizeSettings(settings: LlmSettings): LlmSettings {
+  const provider = settings.provider === 'deepseek' || settings.provider === 'mimo' ? settings.provider : 'custom';
+  const defaults = provider === 'custom' ? undefined : providerDefaults[provider];
+
+  return {
+    ...settings,
+    provider,
+    endpoint: settings.endpoint?.trim() || defaults?.endpoint || '',
+    model: settings.model?.trim() || defaults?.model || '',
+  };
+}
+
+function hasHeader(headers: Record<string, string>, name: string) {
+  return Object.keys(headers).some((headerName) => headerName.toLowerCase() === name.toLowerCase());
+}
+
+function setProviderAuthHeaders(settings: LlmSettings, headers: Record<string, string>) {
+  const apiKey = settings.apiKey?.trim();
+  if (!apiKey) return;
+
+  if (settings.provider === 'mimo') {
+    if (!hasHeader(headers, 'api-key')) headers['api-key'] = apiKey;
+    return;
+  }
+
+  if (!hasHeader(headers, 'authorization')) {
+    headers.Authorization = `Bearer ${apiKey}`;
+  }
 }
 
 function buildPrompt(profile: BusinessProfile, offer: Offer, locale: LocaleCode) {
@@ -182,19 +224,18 @@ export default async (req: Request, _context: Context) => {
     const { profile, offer, settings } = body;
     const locale = body.locale && body.locale in languageNames ? body.locale : 'zh-CN';
     if (!profile || !offer || !settings) return jsonResponse({ error: '缺少生成参数。' }, 400);
-    if (!settings.endpoint?.trim()) return jsonResponse({ error: '请填写 API 地址。' }, 400);
-    if (!settings.model?.trim()) return jsonResponse({ error: '请填写模型名称。' }, 400);
+    const normalizedSettings = normalizeSettings(settings);
+    if (!normalizedSettings.endpoint?.trim()) return jsonResponse({ error: '请填写 API 地址。' }, 400);
+    if (!normalizedSettings.model?.trim()) return jsonResponse({ error: '请填写模型名称。' }, 400);
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...parseExtraHeaders(settings.extraHeaders),
+      ...parseExtraHeaders(normalizedSettings.extraHeaders),
     };
 
-    if (settings.apiKey?.trim() && !headers.Authorization && !headers.authorization) {
-      headers.Authorization = `Bearer ${settings.apiKey.trim()}`;
-    }
+    setProviderAuthHeaders(normalizedSettings, headers);
 
-    const upstream = await callChatCompletions(settings, headers, profile, offer, locale);
+    const upstream = await callChatCompletions(normalizedSettings, headers, profile, offer, locale);
 
     const upstreamText = await upstream.text();
     if (!upstream.ok) {

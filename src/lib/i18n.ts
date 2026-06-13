@@ -49,6 +49,10 @@ export type Translations = {
     modeLabel: string;
     template: string;
     api: string;
+    provider: string;
+    providerCustom: string;
+    providerDeepSeek: string;
+    providerMimo: string;
     setupHint: string;
     endpoint: string;
     endpointPlaceholder: string;
@@ -165,6 +169,10 @@ const base: Translations = {
     modeLabel: '生成方式',
     template: '模板',
     api: 'LLM API',
+    provider: 'API 提供商',
+    providerCustom: '自定义兼容接口',
+    providerDeepSeek: 'DeepSeek',
+    providerMimo: 'MiMo',
     setupHint: '填写 API 地址、模型和 Key 即可生成；需要特殊网关时再打开高级设置。',
     endpoint: 'API 地址',
     endpointPlaceholder: 'https://api.example.com/v1/chat/completions',
@@ -253,6 +261,10 @@ export const translations: Record<LocaleCode, Translations> = {
       title: 'Generation method',
       modeLabel: 'Generation method',
       template: 'Template',
+      provider: 'API provider',
+      providerCustom: 'Custom compatible API',
+      providerDeepSeek: 'DeepSeek',
+      providerMimo: 'MiMo',
       setupHint: 'Enter an endpoint, model, and key. Open advanced settings only for special gateways.',
       endpoint: 'API endpoint',
       model: 'Model',

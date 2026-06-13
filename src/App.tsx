@@ -36,6 +36,7 @@ const defaultOffer: Offer = {
 };
 
 const defaultLlmSettings: LlmSettings = {
+  provider: 'custom',
   endpoint: '',
   model: '',
   apiKey: '',

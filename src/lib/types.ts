@@ -45,7 +45,10 @@ export type GeneratedPack = {
   reviewReplies: ReviewReplies;
 };
 
+export type LlmProvider = 'custom' | 'deepseek' | 'mimo';
+
 export type LlmSettings = {
+  provider: LlmProvider;
   endpoint: string;
   model: string;
   apiKey: string;

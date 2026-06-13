@@ -1,6 +1,6 @@
 import { Bot, KeyRound, Loader2, WandSparkles } from 'lucide-react';
 import type { Translations } from '../lib/i18n';
-import type { GenerationMode, LlmSettings } from '../lib/types';
+import type { GenerationMode, LlmProvider, LlmSettings } from '../lib/types';
 
 type LlmSettingsPanelProps = {
   mode: GenerationMode;
@@ -11,6 +11,19 @@ type LlmSettingsPanelProps = {
   onModeChange: (mode: GenerationMode) => void;
   onSettingsChange: (settings: LlmSettings) => void;
   onGenerate: () => void;
+};
+
+const providerPresets: Record<Exclude<LlmProvider, 'custom'>, Pick<LlmSettings, 'endpoint' | 'model' | 'extraHeaders'>> = {
+  deepseek: {
+    endpoint: 'https://api.deepseek.com/chat/completions',
+    model: 'deepseek-v4-flash',
+    extraHeaders: '',
+  },
+  mimo: {
+    endpoint: 'https://api.xiaomimimo.com/v1/chat/completions',
+    model: 'mimo-v2.5-pro',
+    extraHeaders: '',
+  },
 };
 
 export function LlmSettingsPanel({
@@ -25,6 +38,19 @@ export function LlmSettingsPanel({
 }: LlmSettingsPanelProps) {
   function update<K extends keyof LlmSettings>(key: K, value: LlmSettings[K]) {
     onSettingsChange({ ...settings, [key]: value });
+  }
+
+  function updateProvider(provider: LlmProvider) {
+    if (provider === 'custom') {
+      onSettingsChange({ ...settings, provider });
+      return;
+    }
+
+    onSettingsChange({
+      ...settings,
+      provider,
+      ...providerPresets[provider],
+    });
   }
 
   return (
@@ -57,6 +83,15 @@ export function LlmSettingsPanel({
       {mode === 'llm' && (
         <>
           <p className="helperText">{t.llm.setupHint}</p>
+
+          <label>
+            {t.llm.provider}
+            <select value={settings.provider} onChange={(event) => updateProvider(event.target.value as LlmProvider)}>
+              <option value="custom">{t.llm.providerCustom}</option>
+              <option value="deepseek">{t.llm.providerDeepSeek}</option>
+              <option value="mimo">{t.llm.providerMimo}</option>
+            </select>
+          </label>
 
           <label>
             {t.llm.endpoint}

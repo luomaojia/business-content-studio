@@ -30,6 +30,10 @@ npm run dev
 
 打开 `http://127.0.0.1:5173/`。
 
+## 在线访问
+
+[https://business-content-studio.netlify.app](https://business-content-studio.netlify.app)
+
 ## 直接下载
 
 - [下载可部署 App 构建包](https://github.com/luomaojia/business-content-studio/releases/download/v0.1.0/business-content-studio-webapp-v0.1.0.zip)

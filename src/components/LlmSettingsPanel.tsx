@@ -56,6 +56,8 @@ export function LlmSettingsPanel({
 
       {mode === 'llm' && (
         <>
+          <p className="helperText">{t.llm.setupHint}</p>
+
           <label>
             {t.llm.endpoint}
             <input
@@ -89,15 +91,18 @@ export function LlmSettingsPanel({
             </label>
           </div>
 
-          <label>
-            {t.llm.extraHeaders}
-            <textarea
-              value={settings.extraHeaders}
-              onChange={(event) => update('extraHeaders', event.target.value)}
-              placeholder={t.llm.extraHeadersPlaceholder}
-              rows={3}
-            />
-          </label>
+          <details className="advancedSettings">
+            <summary>{t.llm.advancedSettings}</summary>
+            <label>
+              {t.llm.extraHeaders}
+              <textarea
+                value={settings.extraHeaders}
+                onChange={(event) => update('extraHeaders', event.target.value)}
+                placeholder={t.llm.extraHeadersPlaceholder}
+                rows={3}
+              />
+            </label>
+          </details>
 
           {error && <p className="errorText">{error}</p>}
 

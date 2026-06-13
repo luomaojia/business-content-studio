@@ -49,6 +49,7 @@ export type Translations = {
     modeLabel: string;
     template: string;
     api: string;
+    setupHint: string;
     endpoint: string;
     endpointPlaceholder: string;
     model: string;
@@ -56,6 +57,7 @@ export type Translations = {
     apiKey: string;
     extraHeaders: string;
     extraHeadersPlaceholder: string;
+    advancedSettings: string;
     generating: string;
     generate: string;
     generateFailed: string;
@@ -163,6 +165,7 @@ const base: Translations = {
     modeLabel: '生成方式',
     template: '模板',
     api: 'LLM API',
+    setupHint: '填写 API 地址、模型和 Key 即可生成；需要特殊网关时再打开高级设置。',
     endpoint: 'API 地址',
     endpointPlaceholder: 'https://api.example.com/v1/chat/completions',
     model: '模型',
@@ -170,6 +173,7 @@ const base: Translations = {
     apiKey: 'API Key',
     extraHeaders: '自定义请求头 JSON',
     extraHeadersPlaceholder: '{"HTTP-Referer":"https://your-site.com","X-Title":"内容工作台"}',
+    advancedSettings: '高级设置',
     generating: '生成中',
     generate: '使用 LLM 生成',
     generateFailed: 'LLM 生成失败',
@@ -249,10 +253,12 @@ export const translations: Record<LocaleCode, Translations> = {
       title: 'Generation method',
       modeLabel: 'Generation method',
       template: 'Template',
+      setupHint: 'Enter an endpoint, model, and key. Open advanced settings only for special gateways.',
       endpoint: 'API endpoint',
       model: 'Model',
       modelPlaceholder: 'e.g. gpt-4o-mini / deepseek-chat',
       extraHeaders: 'Custom headers JSON',
+      advancedSettings: 'Advanced settings',
       generating: 'Generating',
       generate: 'Generate with LLM',
       generateFailed: 'LLM generation failed',
@@ -275,7 +281,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'アプリとして実行中',
     business: { ...base.business, title: '店舗情報', name: '店舗名', industry: '業種', city: '都市/エリア', avgPrice: '平均単価', tone: 'ブランドトーン', signatureItems: '看板商品', presets: '業種サンプル', presetTitle: (industry) => `${industry}のサンプルを使用` },
     offer: { ...base.offer, title: '商品とキャンペーン', name: '商品/サービス名', price: '価格', discount: '特典', sellingPoints: '訴求点', upload: '商品画像をアップロード', previewAlt: '商品プレビュー' },
-    llm: { ...base.llm, title: '生成方法', modeLabel: '生成方法', template: 'テンプレート', endpoint: 'API エンドポイント', model: 'モデル', extraHeaders: 'カスタムヘッダー JSON', generating: '生成中', generate: 'LLMで生成', generateFailed: 'LLM生成に失敗しました' },
+    llm: { ...base.llm, title: '生成方法', modeLabel: '生成方法', template: 'テンプレート', setupHint: 'APIエンドポイント、モデル、キーを入力すれば生成できます。特殊なゲートウェイだけ詳細設定を開いてください。', endpoint: 'API エンドポイント', model: 'モデル', extraHeaders: 'カスタムヘッダー JSON', advancedSettings: '詳細設定', generating: '生成中', generate: 'LLMで生成', generateFailed: 'LLM生成に失敗しました' },
     export: { ...base.export, title: 'コンテンツを書き出し', txt: 'TXTを書き出し', json: 'JSONを書き出し', reset: 'サンプルをリセット', localOnly: 'ローカル生成、ログイン不要' },
     calendar: { ...base.calendar, title: '投稿カレンダー', copyDay: 'この日の内容をコピー', videoScript: '動画台本' },
     reviews: { ...base.reviews, title: 'レビュー返信テンプレート', positive: '高評価への返信', negative: '低評価への返信', slowService: '待ち時間への返信', priceConcern: '価格への返信', refund: '返金対応' },
@@ -294,7 +300,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: '앱 모드 실행 중',
     business: { ...base.business, title: '매장 정보', name: '매장명', industry: '업종', city: '도시/상권', avgPrice: '객단가', tone: '브랜드 톤', signatureItems: '대표 상품', presets: '업종 예시', presetTitle: (industry) => `${industry} 예시 사용` },
     offer: { ...base.offer, title: '상품과 프로모션', name: '상품/서비스명', price: '가격', discount: '프로모션', sellingPoints: '셀링 포인트', upload: '상품 이미지 업로드', previewAlt: '상품 미리보기' },
-    llm: { ...base.llm, title: '생성 방식', modeLabel: '생성 방식', template: '템플릿', endpoint: 'API 주소', model: '모델', extraHeaders: '커스텀 헤더 JSON', generating: '생성 중', generate: 'LLM으로 생성', generateFailed: 'LLM 생성 실패' },
+    llm: { ...base.llm, title: '생성 방식', modeLabel: '생성 방식', template: '템플릿', setupHint: 'API 주소, 모델, 키만 입력하면 생성할 수 있습니다. 특수 게이트웨이는 고급 설정을 여세요.', endpoint: 'API 주소', model: '모델', extraHeaders: '커스텀 헤더 JSON', advancedSettings: '고급 설정', generating: '생성 중', generate: 'LLM으로 생성', generateFailed: 'LLM 생성 실패' },
     export: { ...base.export, title: '콘텐츠 내보내기', txt: 'TXT 내보내기', json: 'JSON 내보내기', reset: '예시 초기화', localOnly: '로컬 생성, 로그인 불필요' },
     calendar: { ...base.calendar, title: '게시 캘린더', copyDay: '이 날짜 내용 복사', videoScript: '영상 스크립트' },
     reviews: { ...base.reviews, title: '리뷰 답변 템플릿', positive: '좋은 리뷰', negative: '나쁜 리뷰', slowService: '서비스 지연', priceConcern: '가격 문의', refund: '환불 요청' },
@@ -313,7 +319,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'Ejecutando como app',
     business: { ...base.business, title: 'Datos del negocio', name: 'Nombre del negocio', industry: 'Sector', city: 'Ciudad / zona', avgPrice: 'Ticket medio', tone: 'Tono de marca', signatureItems: 'Productos estrella', presets: 'Ejemplos por sector', presetTitle: (industry) => `Usar ejemplo de ${industry}` },
     offer: { ...base.offer, title: 'Producto y promoción', name: 'Producto / servicio', price: 'Precio', discount: 'Promoción', sellingPoints: 'Puntos de venta', upload: 'Subir imagen', previewAlt: 'Vista previa' },
-    llm: { ...base.llm, title: 'Método de generación', modeLabel: 'Método', template: 'Plantilla', endpoint: 'Endpoint API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', generating: 'Generando', generate: 'Generar con LLM', generateFailed: 'Falló la generación LLM' },
+    llm: { ...base.llm, title: 'Método de generación', modeLabel: 'Método', template: 'Plantilla', setupHint: 'Introduce endpoint, modelo y clave. Usa ajustes avanzados solo para gateways especiales.', endpoint: 'Endpoint API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', advancedSettings: 'Ajustes avanzados', generating: 'Generando', generate: 'Generar con LLM', generateFailed: 'Falló la generación LLM' },
     export: { ...base.export, title: 'Exportar paquete', txt: 'Exportar TXT', json: 'Exportar JSON', reset: 'Restablecer demo', localOnly: 'Generado localmente, sin login' },
     calendar: { ...base.calendar, title: 'Calendario de publicaciones', copyDay: 'Copiar este día', videoScript: 'Guion de video' },
     reviews: { ...base.reviews, title: 'Respuestas a reseñas', positive: 'Reseña positiva', negative: 'Reseña negativa', slowService: 'Servicio lento', priceConcern: 'Duda de precio', refund: 'Reembolso' },
@@ -332,7 +338,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'Ouvert comme app',
     business: { ...base.business, title: 'Profil du commerce', name: 'Nom du commerce', industry: 'Secteur', city: 'Ville / quartier', avgPrice: 'Panier moyen', tone: 'Ton de marque', signatureItems: 'Produits phares', presets: 'Exemples sectoriels', presetTitle: (industry) => `Utiliser l'exemple ${industry}` },
     offer: { ...base.offer, title: 'Produit et offre', name: 'Produit / service', price: 'Prix', discount: 'Offre', sellingPoints: 'Arguments', upload: 'Ajouter une image', previewAlt: 'Aperçu produit' },
-    llm: { ...base.llm, title: 'Méthode de génération', modeLabel: 'Méthode', template: 'Modèle', endpoint: 'Endpoint API', model: 'Modèle', extraHeaders: 'Headers JSON personnalisés', generating: 'Génération', generate: 'Générer avec LLM', generateFailed: 'Échec de génération LLM' },
+    llm: { ...base.llm, title: 'Méthode de génération', modeLabel: 'Méthode', template: 'Modèle', setupHint: 'Renseignez endpoint, modèle et clé. Ouvrez les réglages avancés seulement pour les passerelles spéciales.', endpoint: 'Endpoint API', model: 'Modèle', extraHeaders: 'Headers JSON personnalisés', advancedSettings: 'Réglages avancés', generating: 'Génération', generate: 'Générer avec LLM', generateFailed: 'Échec de génération LLM' },
     export: { ...base.export, title: 'Exporter le pack', txt: 'Exporter TXT', json: 'Exporter JSON', reset: 'Réinitialiser', localOnly: 'Généré localement, sans connexion' },
     calendar: { ...base.calendar, title: 'Calendrier de publication', copyDay: 'Copier ce jour', videoScript: 'Script vidéo' },
     reviews: { ...base.reviews, title: 'Réponses aux avis', positive: 'Avis positif', negative: 'Avis négatif', slowService: 'Service lent', priceConcern: 'Question prix', refund: 'Remboursement' },
@@ -351,7 +357,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'Läuft als App',
     business: { ...base.business, title: 'Geschäftsprofil', name: 'Name', industry: 'Branche', city: 'Stadt / Viertel', avgPrice: 'Durchschnittspreis', tone: 'Markenton', signatureItems: 'Top-Produkte', presets: 'Branchenbeispiele', presetTitle: (industry) => `${industry}-Beispiel nutzen` },
     offer: { ...base.offer, title: 'Produkt und Aktion', name: 'Produkt / Service', price: 'Preis', discount: 'Aktion', sellingPoints: 'Verkaufsargumente', upload: 'Produktbild hochladen', previewAlt: 'Produktvorschau' },
-    llm: { ...base.llm, title: 'Generierungsmethode', modeLabel: 'Methode', template: 'Vorlage', endpoint: 'API-Endpunkt', model: 'Modell', extraHeaders: 'Eigene Header JSON', generating: 'Generiert', generate: 'Mit LLM generieren', generateFailed: 'LLM-Generierung fehlgeschlagen' },
+    llm: { ...base.llm, title: 'Generierungsmethode', modeLabel: 'Methode', template: 'Vorlage', setupHint: 'Endpunkt, Modell und Schlüssel reichen aus. Erweiterte Einstellungen nur für besondere Gateways öffnen.', endpoint: 'API-Endpunkt', model: 'Modell', extraHeaders: 'Eigene Header JSON', advancedSettings: 'Erweiterte Einstellungen', generating: 'Generiert', generate: 'Mit LLM generieren', generateFailed: 'LLM-Generierung fehlgeschlagen' },
     export: { ...base.export, title: 'Content-Paket exportieren', txt: 'TXT exportieren', json: 'JSON exportieren', reset: 'Demo zurücksetzen', localOnly: 'Lokal generiert, kein Login' },
     calendar: { ...base.calendar, title: 'Posting-Kalender', copyDay: 'Diesen Tag kopieren', videoScript: 'Videoskript' },
     reviews: { ...base.reviews, title: 'Antworten auf Bewertungen', positive: 'Positive Bewertung', negative: 'Negative Bewertung', slowService: 'Langsamer Service', priceConcern: 'Preisfrage', refund: 'Rückerstattung' },
@@ -370,7 +376,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'Rodando como app',
     business: { ...base.business, title: 'Perfil do negócio', name: 'Nome do negócio', industry: 'Setor', city: 'Cidade / bairro', avgPrice: 'Ticket médio', tone: 'Tom da marca', signatureItems: 'Produtos principais', presets: 'Exemplos por setor', presetTitle: (industry) => `Usar exemplo de ${industry}` },
     offer: { ...base.offer, title: 'Produto e promoção', name: 'Produto / serviço', price: 'Preço', discount: 'Promoção', sellingPoints: 'Diferenciais', upload: 'Enviar imagem', previewAlt: 'Prévia do produto' },
-    llm: { ...base.llm, title: 'Método de geração', modeLabel: 'Método', template: 'Modelo', endpoint: 'Endpoint da API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', generating: 'Gerando', generate: 'Gerar com LLM', generateFailed: 'Falha na geração LLM' },
+    llm: { ...base.llm, title: 'Método de geração', modeLabel: 'Método', template: 'Modelo', setupHint: 'Preencha endpoint, modelo e chave. Abra opções avançadas só para gateways especiais.', endpoint: 'Endpoint da API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', advancedSettings: 'Opções avançadas', generating: 'Gerando', generate: 'Gerar com LLM', generateFailed: 'Falha na geração LLM' },
     export: { ...base.export, title: 'Exportar pacote', txt: 'Exportar TXT', json: 'Exportar JSON', reset: 'Resetar demo', localOnly: 'Gerado localmente, sem login' },
     calendar: { ...base.calendar, title: 'Calendário de posts', copyDay: 'Copiar este dia', videoScript: 'Roteiro de vídeo' },
     reviews: { ...base.reviews, title: 'Respostas a avaliações', positive: 'Avaliação positiva', negative: 'Avaliação negativa', slowService: 'Serviço lento', priceConcern: 'Dúvida de preço', refund: 'Reembolso' },
@@ -391,7 +397,7 @@ export const translations: Record<LocaleCode, Translations> = {
     runningAsApp: 'يعمل كتطبيق',
     business: { ...base.business, title: 'بيانات المتجر', name: 'اسم المتجر', industry: 'النشاط', city: 'المدينة / الحي', avgPrice: 'متوسط السعر', tone: 'نبرة العلامة', signatureItems: 'المنتجات الرئيسية', presets: 'أمثلة الأنشطة', presetTitle: (industry) => `استخدم مثال ${industry}` },
     offer: { ...base.offer, title: 'المنتج والعرض', name: 'اسم المنتج / الخدمة', price: 'السعر', discount: 'العرض', sellingPoints: 'نقاط البيع', upload: 'رفع صورة المنتج', previewAlt: 'معاينة المنتج' },
-    llm: { ...base.llm, title: 'طريقة التوليد', modeLabel: 'طريقة التوليد', template: 'قالب', endpoint: 'رابط API', model: 'النموذج', extraHeaders: 'رؤوس مخصصة JSON', generating: 'جار التوليد', generate: 'توليد عبر LLM', generateFailed: 'فشل توليد LLM' },
+    llm: { ...base.llm, title: 'طريقة التوليد', modeLabel: 'طريقة التوليد', template: 'قالب', setupHint: 'أدخل رابط API والنموذج والمفتاح. افتح الإعدادات المتقدمة فقط للبوابات الخاصة.', endpoint: 'رابط API', model: 'النموذج', extraHeaders: 'رؤوس مخصصة JSON', advancedSettings: 'إعدادات متقدمة', generating: 'جار التوليد', generate: 'توليد عبر LLM', generateFailed: 'فشل توليد LLM' },
     export: { ...base.export, title: 'تصدير حزمة المحتوى', txt: 'تصدير TXT', json: 'تصدير JSON', reset: 'إعادة ضبط المثال', localOnly: 'توليد محلي دون تسجيل' },
     calendar: { ...base.calendar, title: 'تقويم النشر', copyDay: 'نسخ محتوى اليوم', videoScript: 'سيناريو الفيديو' },
     reviews: { ...base.reviews, title: 'قوالب الرد على التقييمات', positive: 'تقييم إيجابي', negative: 'تقييم سلبي', slowService: 'خدمة بطيئة', priceConcern: 'اعتراض على السعر', refund: 'طلب استرداد' },

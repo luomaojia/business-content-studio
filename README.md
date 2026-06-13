@@ -53,5 +53,3 @@ npm run preview
 npm test
 npm run build
 ```
-
-首版不接数据库、不接登录、不接真实 AI API，重点验证小商家是否愿意为一周内容包付费。

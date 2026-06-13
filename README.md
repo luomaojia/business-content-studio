@@ -30,6 +30,12 @@ npm run dev
 
 打开 `http://127.0.0.1:5173/`。
 
+## 直接下载
+
+- [下载可部署 App 构建包](https://github.com/luomaojia/business-content-studio/releases/download/v0.1.0/business-content-studio-webapp-v0.1.0.zip)
+- [下载完整源码 ZIP](https://github.com/luomaojia/business-content-studio/archive/refs/tags/v0.1.0.zip)
+- [查看 GitHub Release](https://github.com/luomaojia/business-content-studio/releases/tag/v0.1.0)
+
 ## 作为 App 安装
 
 生产构建后，应用会注册 service worker，并提供 iOS、Android、Windows 都能使用的 PWA 安装入口：

@@ -32,14 +32,20 @@ npm run dev
 
 ## 作为 App 安装
 
-生产构建后，应用会注册 service worker 并提供浏览器安装入口：
+生产构建后，应用会注册 service worker，并提供 iOS、Android、Windows 都能使用的 PWA 安装入口：
 
 ```bash
 npm run build
 npm run preview
 ```
 
-打开预览地址后，可在 Chrome、Edge 或 Android 浏览器中选择“安装应用”或“添加到主屏幕”。安装后应用会以独立窗口运行，并缓存核心页面，断网时仍可打开已缓存的工作台。
+平台支持：
+
+- iOS / iPadOS：用 Safari 打开站点，点击分享按钮，选择“添加到主屏幕”。
+- Android：用 Chrome 打开站点，点击浏览器菜单或页面安装提示，选择“安装应用”。
+- Windows：用 Edge 或 Chrome 打开站点，点击地址栏安装图标，安装后以独立窗口运行。
+
+安装后应用会缓存核心页面和图标，断网时仍可打开已缓存的工作台。
 
 ## 验证
 

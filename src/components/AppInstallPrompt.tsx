@@ -1,5 +1,6 @@
 import { Download, Smartphone, WifiOff } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import type { Translations } from '../lib/i18n';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -13,16 +14,20 @@ function isStandaloneApp() {
   );
 }
 
-export function AppInstallPrompt() {
+type AppInstallPromptProps = {
+  t: Translations;
+};
+
+export function AppInstallPrompt({ t }: AppInstallPromptProps) {
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(isStandaloneApp);
   const [online, setOnline] = useState(navigator.onLine);
 
   const installLabel = useMemo(() => {
-    if (installed) return '已以 App 模式运行';
-    if (installEvent) return '安装到桌面';
-    return '可作为 App 使用';
-  }, [installEvent, installed]);
+    if (installed) return t.runningAsApp;
+    if (installEvent) return t.installApp;
+    return t.appInstallStatus;
+  }, [installEvent, installed, t]);
 
   useEffect(() => {
     function handleBeforeInstallPrompt(event: Event) {
@@ -65,19 +70,19 @@ export function AppInstallPrompt() {
   }
 
   return (
-    <div className="appStatusStrip" aria-label="App 安装状态">
+    <div className="appStatusStrip" aria-label={t.appInstallStatus}>
       <span>
         <Smartphone size={16} aria-hidden="true" />
         {installLabel}
       </span>
       <span className={online ? 'onlineState' : 'offlineState'}>
         {online ? <Download size={16} aria-hidden="true" /> : <WifiOff size={16} aria-hidden="true" />}
-        {online ? '支持离线缓存' : '当前离线，可继续使用'}
+        {online ? t.offlineReady : t.offlineNow}
       </span>
       {installEvent && !installed && (
         <button type="button" className="secondaryButton compactButton" onClick={installApp}>
           <Download size={16} aria-hidden="true" />
-          安装 App
+          {t.installApp}
         </button>
       )}
     </div>

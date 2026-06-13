@@ -1,9 +1,11 @@
 import { Bot, KeyRound, Loader2, WandSparkles } from 'lucide-react';
+import type { Translations } from '../lib/i18n';
 import type { GenerationMode, LlmSettings } from '../lib/types';
 
 type LlmSettingsPanelProps = {
   mode: GenerationMode;
   settings: LlmSettings;
+  t: Translations;
   isGenerating: boolean;
   error: string;
   onModeChange: (mode: GenerationMode) => void;
@@ -14,6 +16,7 @@ type LlmSettingsPanelProps = {
 export function LlmSettingsPanel({
   mode,
   settings,
+  t,
   isGenerating,
   error,
   onModeChange,
@@ -28,52 +31,52 @@ export function LlmSettingsPanel({
     <section className="panel" aria-labelledby="llm-heading">
       <div className="panelHeader">
         <div>
-          <p className="eyebrow">AI Mode</p>
-          <h2 id="llm-heading">文案生成方式</h2>
+          <p className="eyebrow">{t.llm.eyebrow}</p>
+          <h2 id="llm-heading">{t.llm.title}</h2>
         </div>
         <Bot size={22} aria-hidden="true" />
       </div>
 
-      <div className="segmentedControl" role="group" aria-label="生成方式">
+      <div className="segmentedControl" role="group" aria-label={t.llm.modeLabel}>
         <button
           type="button"
           className={mode === 'template' ? 'segmentButton active' : 'segmentButton'}
           onClick={() => onModeChange('template')}
         >
-          模板
+          {t.llm.template}
         </button>
         <button
           type="button"
           className={mode === 'llm' ? 'segmentButton active' : 'segmentButton'}
           onClick={() => onModeChange('llm')}
         >
-          LLM API
+          {t.llm.api}
         </button>
       </div>
 
       {mode === 'llm' && (
         <>
           <label>
-            API 地址
+            {t.llm.endpoint}
             <input
               value={settings.endpoint}
               onChange={(event) => update('endpoint', event.target.value)}
-              placeholder="https://api.example.com/v1/chat/completions"
+              placeholder={t.llm.endpointPlaceholder}
             />
           </label>
 
           <div className="fieldGrid">
             <label>
-              模型
+              {t.llm.model}
               <input
                 value={settings.model}
                 onChange={(event) => update('model', event.target.value)}
-                placeholder="例如：gpt-4o-mini / deepseek-chat"
+                placeholder={t.llm.modelPlaceholder}
               />
             </label>
 
             <label>
-              API Key
+              {t.llm.apiKey}
               <span className="passwordInput">
                 <KeyRound size={15} aria-hidden="true" />
                 <input
@@ -87,11 +90,11 @@ export function LlmSettingsPanel({
           </div>
 
           <label>
-            自定义请求头 JSON
+            {t.llm.extraHeaders}
             <textarea
               value={settings.extraHeaders}
               onChange={(event) => update('extraHeaders', event.target.value)}
-              placeholder='例如：{"HTTP-Referer":"https://your-site.com","X-Title":"内容工作台"}'
+              placeholder={t.llm.extraHeadersPlaceholder}
               rows={3}
             />
           </label>
@@ -100,7 +103,7 @@ export function LlmSettingsPanel({
 
           <button type="button" className="primaryButton" onClick={onGenerate} disabled={isGenerating}>
             {isGenerating ? <Loader2 className="spinIcon" size={17} aria-hidden="true" /> : <WandSparkles size={17} aria-hidden="true" />}
-            {isGenerating ? '生成中' : '使用 LLM 生成'}
+            {isGenerating ? t.llm.generating : t.llm.generate}
           </button>
         </>
       )}

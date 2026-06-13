@@ -24,7 +24,31 @@ type LlmSettings = {
   extraHeaders?: string;
 };
 
-const requiredThemes = ['新品', '优惠', '口碑', '场景', '爆款', '节日', '复购'];
+type LocaleCode = 'zh-CN' | 'en' | 'ja' | 'ko' | 'es' | 'fr' | 'de' | 'pt' | 'ar';
+
+const languageNames: Record<LocaleCode, string> = {
+  'zh-CN': 'Simplified Chinese',
+  en: 'English',
+  ja: 'Japanese',
+  ko: 'Korean',
+  es: 'Spanish',
+  fr: 'French',
+  de: 'German',
+  pt: 'Portuguese',
+  ar: 'Arabic',
+};
+
+const themeLabels: Record<LocaleCode, string[]> = {
+  'zh-CN': ['新品', '优惠', '口碑', '场景', '爆款', '节日', '复购'],
+  en: ['New', 'Deal', 'Social proof', 'Scene', 'Bestseller', 'Weekend', 'Comeback'],
+  ja: ['新商品', 'お得情報', '口コミ', 'シーン', '人気商品', '週末', 'リピート'],
+  ko: ['신상품', '혜택', '후기', '상황', '인기상품', '주말', '재방문'],
+  es: ['Nuevo', 'Oferta', 'Prueba social', 'Escena', 'Popular', 'Fin de semana', 'Repetición'],
+  fr: ['Nouveauté', 'Offre', 'Preuve sociale', 'Moment', 'Populaire', 'Week-end', 'Retour'],
+  de: ['Neu', 'Angebot', 'Empfehlung', 'Situation', 'Bestseller', 'Wochenende', 'Wiederkehr'],
+  pt: ['Novidade', 'Oferta', 'Prova social', 'Momento', 'Mais pedido', 'Fim de semana', 'Retorno'],
+  ar: ['جديد', 'عرض', 'دليل اجتماعي', 'مناسبة', 'الأكثر طلبا', 'نهاية الأسبوع', 'عودة'],
+};
 
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -45,9 +69,11 @@ function parseExtraHeaders(value = '') {
   );
 }
 
-function buildPrompt(profile: BusinessProfile, offer: Offer) {
+function buildPrompt(profile: BusinessProfile, offer: Offer, locale: LocaleCode) {
+  const targetLanguage = languageNames[locale] ?? languageNames['zh-CN'];
+  const themes = themeLabels[locale] ?? themeLabels['zh-CN'];
   return [
-    '你是本地生活商家运营文案助手。请为店铺生成中文社媒内容包。',
+    `You are a local business marketing copy assistant. Generate the content pack in ${targetLanguage}.`,
     '必须只输出 JSON，不要 Markdown，不要代码块。',
     'JSON schema:',
     '{',
@@ -58,7 +84,7 @@ function buildPrompt(profile: BusinessProfile, offer: Offer) {
     '    "reviewReplies": { "positive": "...", "negative": "...", "slowService": "...", "priceConcern": "...", "refund": "..." }',
     '  }',
     '}',
-    '要求：calendar 必须正好 7 条，theme 依次为 新品、优惠、口碑、场景、爆款、节日、复购。每条 postBody 要包含具体店名、产品、卖点、优惠或本地场景。hashtags 3-6 个。videoScript 需要包含 3-4 个镜头。不要编造不存在的地址。',
+    `要求：calendar 必须正好 7 条，theme 依次为 ${themes.join('、')}。每条 postBody 要包含具体店名、产品、卖点、优惠或本地场景。hashtags 3-6 个。videoScript 需要包含 3-4 个镜头。不要编造不存在的地址。除 JSON 字段名以外，所有面向用户的内容必须使用 ${targetLanguage}。`,
     '',
     `店铺资料：${JSON.stringify(profile)}`,
     `产品/活动：${JSON.stringify({ ...offer, imagePreviewUrl: offer.imagePreviewUrl ? '[用户已上传图片]' : '' })}`,
@@ -73,7 +99,8 @@ function extractJsonObject(text: string) {
   return match[0];
 }
 
-function validatePack(payload: any) {
+function validatePack(payload: any, locale: LocaleCode) {
+  const requiredThemes = themeLabels[locale] ?? themeLabels['zh-CN'];
   const pack = payload?.pack;
   if (!pack || !Array.isArray(pack.calendar) || pack.calendar.length !== 7) {
     throw new Error('模型返回内容缺少 7 天日历。');
@@ -102,17 +129,17 @@ function validatePack(payload: any) {
   return pack;
 }
 
-async function callChatCompletions(settings: LlmSettings, headers: Record<string, string>, profile: BusinessProfile, offer: Offer) {
+async function callChatCompletions(settings: LlmSettings, headers: Record<string, string>, profile: BusinessProfile, offer: Offer, locale: LocaleCode) {
   const baseBody = {
     model: settings.model.trim(),
     messages: [
       {
         role: 'system',
-        content: '你只返回符合用户要求的 JSON。不要输出 Markdown。',
+        content: `Return only valid JSON. User-facing content must be in ${languageNames[locale] ?? languageNames['zh-CN']}. Do not output Markdown.`,
       },
       {
         role: 'user',
-        content: buildPrompt(profile, offer),
+        content: buildPrompt(profile, offer, locale),
       },
     ],
     temperature: 0.7,
@@ -149,9 +176,11 @@ export default async (req: Request, _context: Context) => {
       profile?: BusinessProfile;
       offer?: Offer;
       settings?: LlmSettings;
+      locale?: LocaleCode;
     };
 
     const { profile, offer, settings } = body;
+    const locale = body.locale && body.locale in languageNames ? body.locale : 'zh-CN';
     if (!profile || !offer || !settings) return jsonResponse({ error: '缺少生成参数。' }, 400);
     if (!settings.endpoint?.trim()) return jsonResponse({ error: '请填写 API 地址。' }, 400);
     if (!settings.model?.trim()) return jsonResponse({ error: '请填写模型名称。' }, 400);
@@ -165,7 +194,7 @@ export default async (req: Request, _context: Context) => {
       headers.Authorization = `Bearer ${settings.apiKey.trim()}`;
     }
 
-    const upstream = await callChatCompletions(settings, headers, profile, offer);
+    const upstream = await callChatCompletions(settings, headers, profile, offer, locale);
 
     const upstreamText = await upstream.text();
     if (!upstream.ok) {
@@ -177,7 +206,7 @@ export default async (req: Request, _context: Context) => {
     if (typeof content !== 'string') throw new Error('上游 API 响应不包含 choices[0].message.content。');
 
     const parsed = JSON.parse(extractJsonObject(content));
-    const pack = validatePack(parsed);
+    const pack = validatePack(parsed, locale);
 
     return jsonResponse({ pack });
   } catch (error) {

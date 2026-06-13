@@ -412,6 +412,21 @@ textarea:focus {
   gap: 10px;
 }
 
+.languageSelect {
+  display: grid;
+  grid-template-columns: auto minmax(118px, 150px);
+  align-items: center;
+  gap: 7px;
+  color: #53615b;
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.languageSelect select {
+  min-height: 38px;
+  padding: 8px 10px;
+}
+
 .copyToast {
   gap: 6px;
   min-height: 36px;

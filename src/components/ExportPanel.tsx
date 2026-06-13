@@ -1,11 +1,14 @@
 import { Download, FileJson, FileText, RotateCcw } from 'lucide-react';
-import type { BusinessProfile, GeneratedPack, Offer } from '../lib/types';
+import type { Translations } from '../lib/i18n';
+import type { BusinessProfile, GeneratedPack, LocaleCode, Offer } from '../lib/types';
 import { serializeTextPack } from '../lib/generator';
 
 type ExportPanelProps = {
   profile: BusinessProfile;
   offer: Offer;
   pack: GeneratedPack;
+  locale: LocaleCode;
+  t: Translations;
   onReset: () => void;
 };
 
@@ -19,23 +22,23 @@ function downloadFile(filename: string, content: string, type: string) {
   URL.revokeObjectURL(url);
 }
 
-export function ExportPanel({ profile, offer, pack, onReset }: ExportPanelProps) {
+export function ExportPanel({ profile, offer, pack, locale, t, onReset }: ExportPanelProps) {
   const safeName = (profile.name || 'business-content').replace(/[\\/:*?"<>|]/g, '-');
 
   return (
-    <section className="exportBar" aria-label="导出操作">
+    <section className="exportBar" aria-label={t.export.title}>
       <div>
-        <p className="eyebrow">Export</p>
-        <h2>内容包导出</h2>
+        <p className="eyebrow">{t.export.eyebrow}</p>
+        <h2>{t.export.title}</h2>
       </div>
       <div className="exportActions">
         <button
           type="button"
           className="primaryButton"
-          onClick={() => downloadFile(`${safeName}-一周内容包.txt`, serializeTextPack(profile, offer, pack), 'text/plain;charset=utf-8')}
+          onClick={() => downloadFile(`${safeName}-content-pack.txt`, serializeTextPack(profile, offer, pack, locale), 'text/plain;charset=utf-8')}
         >
           <FileText size={17} aria-hidden="true" />
-          导出 TXT
+          {t.export.txt}
         </button>
         <button
           type="button"
@@ -43,21 +46,21 @@ export function ExportPanel({ profile, offer, pack, onReset }: ExportPanelProps)
           onClick={() =>
             downloadFile(
               `${safeName}-项目数据.json`,
-              JSON.stringify({ profile, offer, pack }, null, 2),
+              JSON.stringify({ locale, profile, offer, pack }, null, 2),
               'application/json;charset=utf-8',
             )
           }
         >
           <FileJson size={17} aria-hidden="true" />
-          导出 JSON
+          {t.export.json}
         </button>
         <button type="button" className="ghostButton" onClick={onReset}>
           <RotateCcw size={16} aria-hidden="true" />
-          重置样例
+          {t.export.reset}
         </button>
         <span className="downloadHint">
           <Download size={15} aria-hidden="true" />
-          本地生成，无需登录
+          {t.export.localOnly}
         </span>
       </div>
     </section>

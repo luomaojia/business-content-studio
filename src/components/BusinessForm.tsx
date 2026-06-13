@@ -1,9 +1,11 @@
 import { Building2, Sparkles } from 'lucide-react';
 import type { BusinessProfile, Industry, Tone } from '../lib/types';
 import { industryPresets } from '../lib/presets';
+import type { Translations } from '../lib/i18n';
 
 type BusinessFormProps = {
   profile: BusinessProfile;
+  t: Translations;
   onChange: (profile: BusinessProfile) => void;
   onUsePreset: (industry: Industry) => void;
 };
@@ -11,7 +13,7 @@ type BusinessFormProps = {
 const industries = Object.keys(industryPresets) as Industry[];
 const tones: Tone[] = ['接地气', '高级感', '活泼', '专业可信'];
 
-export function BusinessForm({ profile, onChange, onUsePreset }: BusinessFormProps) {
+export function BusinessForm({ profile, t, onChange, onUsePreset }: BusinessFormProps) {
   function update<K extends keyof BusinessProfile>(key: K, value: BusinessProfile[K]) {
     onChange({ ...profile, [key]: value });
   }
@@ -20,24 +22,24 @@ export function BusinessForm({ profile, onChange, onUsePreset }: BusinessFormPro
     <section className="panel" aria-labelledby="business-heading">
       <div className="panelHeader">
         <div>
-          <p className="eyebrow">Step 1</p>
-          <h2 id="business-heading">店铺资料</h2>
+          <p className="eyebrow">{t.business.step}</p>
+          <h2 id="business-heading">{t.business.title}</h2>
         </div>
         <Building2 size={22} aria-hidden="true" />
       </div>
 
       <label>
-        店铺名称
+        {t.business.name}
         <input
           value={profile.name}
           onChange={(event) => update('name', event.target.value)}
-          placeholder="例如：巷口夜宵铺"
+          placeholder={t.business.namePlaceholder}
         />
       </label>
 
       <div className="fieldGrid">
         <label>
-          行业
+          {t.business.industry}
           <select
             value={profile.industry}
             onChange={(event) => {
@@ -47,39 +49,39 @@ export function BusinessForm({ profile, onChange, onUsePreset }: BusinessFormPro
           >
             {industries.map((industry) => (
               <option key={industry} value={industry}>
-                {industry}
+                {t.industries[industry]}
               </option>
             ))}
           </select>
         </label>
 
         <label>
-          城市/商圈
+          {t.business.city}
           <input
             value={profile.city}
             onChange={(event) => update('city', event.target.value)}
-            placeholder="例如：杭州湖滨"
+            placeholder={t.business.cityPlaceholder}
           />
         </label>
       </div>
 
       <div className="fieldGrid">
         <label>
-          客单价
+          {t.business.avgPrice}
           <input
             value={profile.avgPrice}
             onChange={(event) => update('avgPrice', event.target.value)}
-            placeholder="例如：68"
+            placeholder={t.business.avgPricePlaceholder}
             inputMode="decimal"
           />
         </label>
 
         <label>
-          品牌语气
+          {t.business.tone}
           <select value={profile.tone} onChange={(event) => update('tone', event.target.value as Tone)}>
             {tones.map((tone) => (
               <option key={tone} value={tone}>
-                {tone}
+                {t.tones[tone]}
               </option>
             ))}
           </select>
@@ -87,26 +89,26 @@ export function BusinessForm({ profile, onChange, onUsePreset }: BusinessFormPro
       </div>
 
       <label>
-        主打产品
+        {t.business.signatureItems}
         <textarea
           value={profile.signatureItems}
           onChange={(event) => update('signatureItems', event.target.value)}
-          placeholder="例如：小龙虾、炭烤牛油、冰粉"
+          placeholder={t.business.signaturePlaceholder}
           rows={3}
         />
       </label>
 
-      <div className="presetRow" aria-label="行业样例">
+      <div className="presetRow" aria-label={t.business.presets}>
         {industries.map((industry) => (
           <button
             key={industry}
             className="ghostButton"
             type="button"
             onClick={() => onUsePreset(industry)}
-            title={`套用${industry}样例`}
+            title={t.business.presetTitle(t.industries[industry])}
           >
             <Sparkles size={16} aria-hidden="true" />
-            {industry.replace('/夜宵店', '')}
+            {t.industries[industry]}
           </button>
         ))}
       </div>

@@ -8,13 +8,15 @@ import { LlmSettingsPanel } from './components/LlmSettingsPanel';
 import { OfferForm } from './components/OfferForm';
 import { ReviewReplyPanel } from './components/ReviewReplyPanel';
 import { generateContentPack } from './lib/generator';
+import { getLocaleMeta, getTranslations, locales } from './lib/i18n';
 import { generateWithLlm } from './lib/llmClient';
 import { industryPresets } from './lib/presets';
-import type { BusinessProfile, GeneratedPack, GenerationMode, Industry, LlmSettings, Offer } from './lib/types';
+import type { BusinessProfile, GeneratedPack, GenerationMode, Industry, LlmSettings, LocaleCode, Offer } from './lib/types';
 
 const storageKey = 'business-content-studio-state-v1';
 const llmStorageKey = 'business-content-studio-llm-settings-v1';
 const llmApiKeyStorageKey = 'business-content-studio-llm-api-key-v1';
+const localeStorageKey = 'business-content-studio-locale-v1';
 
 const defaultIndustry: Industry = '餐饮/夜宵店';
 const defaultPreset = industryPresets[defaultIndustry];
@@ -73,16 +75,30 @@ function loadLlmSettings(): LlmSettings {
   }
 }
 
+function loadLocale(): LocaleCode {
+  const saved = localStorage.getItem(localeStorageKey) as LocaleCode | null;
+  return saved && locales.some((locale) => locale.code === saved) ? saved : 'zh-CN';
+}
+
 export default function App() {
   const [{ profile, offer }, setState] = useState<SavedState>(loadSavedState);
+  const [locale, setLocale] = useState<LocaleCode>(loadLocale);
   const [mode, setMode] = useState<GenerationMode>('template');
   const [llmSettings, setLlmSettings] = useState<LlmSettings>(loadLlmSettings);
   const [llmPack, setLlmPack] = useState<GeneratedPack | null>(null);
   const [llmError, setLlmError] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
-  const templatePack = useMemo(() => generateContentPack(profile, offer), [profile, offer]);
+  const t = getTranslations(locale);
+  const localeMeta = getLocaleMeta(locale);
+  const templatePack = useMemo(() => generateContentPack(profile, offer, locale), [profile, offer, locale]);
   const pack = mode === 'llm' && llmPack ? llmPack : templatePack;
+
+  useEffect(() => {
+    localStorage.setItem(localeStorageKey, locale);
+    document.documentElement.lang = locale;
+    document.documentElement.dir = localeMeta.dir || 'ltr';
+  }, [locale, localeMeta]);
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify({ profile, offer }));
@@ -97,6 +113,12 @@ export default function App() {
 
   function setProfile(nextProfile: BusinessProfile) {
     setState((current) => ({ ...current, profile: nextProfile }));
+    setLlmPack(null);
+    setLlmError('');
+  }
+
+  function changeLocale(nextLocale: LocaleCode) {
+    setLocale(nextLocale);
     setLlmPack(null);
     setLlmError('');
   }
@@ -129,7 +151,7 @@ export default function App() {
 
   async function copyText(text: string) {
     await navigator.clipboard.writeText(text);
-    setCopyStatus('已复制');
+    setCopyStatus(t.copied);
     window.setTimeout(() => setCopyStatus(''), 1600);
   }
 
@@ -144,10 +166,10 @@ export default function App() {
     setIsGenerating(true);
     setLlmError('');
     try {
-      const result = await generateWithLlm(profile, offer, llmSettings);
+      const result = await generateWithLlm(profile, offer, llmSettings, locale);
       setLlmPack(result.pack);
     } catch (error) {
-      setLlmError(error instanceof Error ? error.message : 'LLM 生成失败');
+      setLlmError(error instanceof Error ? error.message : t.llm.generateFailed);
     } finally {
       setIsGenerating(false);
     }
@@ -161,11 +183,21 @@ export default function App() {
             <Store size={24} aria-hidden="true" />
           </div>
           <div>
-            <p>Local Growth Desk</p>
-            <h1>本地小商家内容工作台</h1>
+            <p>{t.brand}</p>
+            <h1>{t.appName}</h1>
           </div>
         </div>
         <div className="topbarActions">
+          <label className="languageSelect">
+            <span>{t.language}</span>
+            <select value={locale} onChange={(event) => changeLocale(event.target.value as LocaleCode)}>
+              {locales.map((entry) => (
+                <option key={entry.code} value={entry.code}>
+                  {entry.label}
+                </option>
+              ))}
+            </select>
+          </label>
           {copyStatus && (
             <span className="copyToast" role="status">
               <Check size={16} aria-hidden="true" />
@@ -174,19 +206,20 @@ export default function App() {
           )}
           <button className="primaryButton" type="button" onClick={() => copyText(pack.calendar[0].postBody)}>
             <WandSparkles size={17} aria-hidden="true" />
-            复制今日文案
+            {t.copyToday}
           </button>
         </div>
       </header>
 
       <div className="appShell">
-        <aside className="inputColumn" aria-label="输入区">
-          <AppInstallPrompt />
-          <BusinessForm profile={profile} onChange={setProfile} onUsePreset={usePreset} />
-          <OfferForm offer={offer} onChange={setOffer} />
+        <aside className="inputColumn" aria-label={t.inputArea}>
+          <AppInstallPrompt t={t} />
+          <BusinessForm profile={profile} t={t} onChange={setProfile} onUsePreset={usePreset} />
+          <OfferForm offer={offer} t={t} onChange={setOffer} />
           <LlmSettingsPanel
             mode={mode}
             settings={llmSettings}
+            t={t}
             isGenerating={isGenerating}
             error={llmError}
             onModeChange={setMode}
@@ -195,10 +228,10 @@ export default function App() {
           />
         </aside>
 
-        <section className="outputColumn" aria-label="结果区">
-          <ExportPanel profile={profile} offer={offer} pack={pack} onReset={resetDemo} />
-          <ContentCalendar days={pack.calendar} onCopy={copyText} />
-          <ReviewReplyPanel replies={pack.reviewReplies} onCopy={copyText} />
+        <section className="outputColumn" aria-label={t.outputArea}>
+          <ExportPanel profile={profile} offer={offer} pack={pack} locale={locale} t={t} onReset={resetDemo} />
+          <ContentCalendar days={pack.calendar} t={t} onCopy={copyText} />
+          <ReviewReplyPanel replies={pack.reviewReplies} t={t} onCopy={copyText} />
         </section>
       </div>
     </main>

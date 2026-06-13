@@ -36,6 +36,22 @@
 
 线上部署通过 Netlify Function `/api/generate-content` 转发请求，避免浏览器跨域限制。
 
+## 多语言
+
+页面顶部可切换语言，当前支持：
+
+- 中文
+- English
+- 日本語
+- 한국어
+- Español
+- Français
+- Deutsch
+- Português
+- العربية
+
+切换语言后，界面文案、模板生成结果、导出 TXT 字段和 LLM 生成提示都会跟随目标语言。阿拉伯语会自动切换为 RTL 方向。
+
 ## 本地运行
 
 ```bash

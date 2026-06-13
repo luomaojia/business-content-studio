@@ -1,19 +1,21 @@
 import { CalendarDays, Copy, Image, Video } from 'lucide-react';
+import type { Translations } from '../lib/i18n';
 import type { GeneratedDay } from '../lib/types';
 
 type ContentCalendarProps = {
   days: GeneratedDay[];
+  t: Translations;
   onCopy: (text: string) => void;
 };
 
-export function ContentCalendar({ days, onCopy }: ContentCalendarProps) {
+export function ContentCalendar({ days, t, onCopy }: ContentCalendarProps) {
   return (
     <section className="resultsBlock" aria-labelledby="calendar-heading">
       <div className="sectionTitle">
         <CalendarDays size={21} aria-hidden="true" />
         <div>
-          <p className="eyebrow">7 Days</p>
-          <h2 id="calendar-heading">发布日历</h2>
+          <p className="eyebrow">{t.calendar.eyebrow}</p>
+          <h2 id="calendar-heading">{t.calendar.title}</h2>
         </div>
       </div>
 
@@ -45,13 +47,13 @@ export function ContentCalendar({ days, onCopy }: ContentCalendarProps) {
               className="iconButton textButton"
               onClick={() =>
                 onCopy(
-                  `${day.title}\n\n${day.postBody}\n\n${day.hashtags.join(' ')}\n\n短视频脚本：\n${day.videoScript}`,
+                  `${day.title}\n\n${day.postBody}\n\n${day.hashtags.join(' ')}\n\n${t.calendar.videoScript}:\n${day.videoScript}`,
                 )
               }
-              title="复制这一天内容"
+              title={t.calendar.copyDay}
             >
               <Copy size={16} aria-hidden="true" />
-              复制当天内容
+              {t.calendar.copyDay}
             </button>
           </article>
         ))}

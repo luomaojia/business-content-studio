@@ -8,11 +8,6 @@ export type Translations = {
   inputArea: string;
   outputArea: string;
   language: string;
-  appInstallStatus: string;
-  offlineReady: string;
-  offlineNow: string;
-  installApp: string;
-  runningAsApp: string;
   business: {
     step: string;
     title: string;
@@ -129,11 +124,6 @@ const base: Translations = {
   inputArea: '输入区',
   outputArea: '结果区',
   language: '语言',
-  appInstallStatus: 'App 安装状态',
-  offlineReady: '支持离线缓存',
-  offlineNow: '当前离线，可继续使用',
-  installApp: '安装 App',
-  runningAsApp: '已以 App 模式运行',
   business: {
     step: 'Step 1',
     title: '店铺资料',
@@ -225,10 +215,6 @@ export const translations: Record<LocaleCode, Translations> = {
     inputArea: 'Input panel',
     outputArea: 'Results panel',
     language: 'Language',
-    offlineReady: 'Offline cache ready',
-    offlineNow: 'Offline, still usable',
-    installApp: 'Install app',
-    runningAsApp: 'Running as app',
     business: {
       ...base.business,
       title: 'Business profile',
@@ -290,10 +276,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: '今日の投稿をコピー',
     copied: 'コピー済み',
     language: '言語',
-    offlineReady: 'オフライン対応',
-    offlineNow: 'オフラインでも利用可能',
-    installApp: 'アプリをインストール',
-    runningAsApp: 'アプリとして実行中',
     business: { ...base.business, title: '店舗情報', name: '店舗名', industry: '業種', city: '都市/エリア', avgPrice: '平均単価', tone: 'ブランドトーン', signatureItems: '看板商品', presets: '業種サンプル', presetTitle: (industry) => `${industry}のサンプルを使用` },
     offer: { ...base.offer, title: '商品とキャンペーン', name: '商品/サービス名', price: '価格', discount: '特典', sellingPoints: '訴求点', upload: '商品画像をアップロード', previewAlt: '商品プレビュー' },
     llm: { ...base.llm, title: '生成方法', modeLabel: '生成方法', template: 'テンプレート', setupHint: 'APIエンドポイント、モデル、キーを入力すれば生成できます。特殊なゲートウェイだけ詳細設定を開いてください。', endpoint: 'API エンドポイント', model: 'モデル', extraHeaders: 'カスタムヘッダー JSON', advancedSettings: '詳細設定', generating: '生成中', generate: 'LLMで生成', generateFailed: 'LLM生成に失敗しました' },
@@ -309,10 +291,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: '오늘 문구 복사',
     copied: '복사됨',
     language: '언어',
-    offlineReady: '오프라인 캐시 지원',
-    offlineNow: '오프라인에서도 사용 가능',
-    installApp: '앱 설치',
-    runningAsApp: '앱 모드 실행 중',
     business: { ...base.business, title: '매장 정보', name: '매장명', industry: '업종', city: '도시/상권', avgPrice: '객단가', tone: '브랜드 톤', signatureItems: '대표 상품', presets: '업종 예시', presetTitle: (industry) => `${industry} 예시 사용` },
     offer: { ...base.offer, title: '상품과 프로모션', name: '상품/서비스명', price: '가격', discount: '프로모션', sellingPoints: '셀링 포인트', upload: '상품 이미지 업로드', previewAlt: '상품 미리보기' },
     llm: { ...base.llm, title: '생성 방식', modeLabel: '생성 방식', template: '템플릿', setupHint: 'API 주소, 모델, 키만 입력하면 생성할 수 있습니다. 특수 게이트웨이는 고급 설정을 여세요.', endpoint: 'API 주소', model: '모델', extraHeaders: '커스텀 헤더 JSON', advancedSettings: '고급 설정', generating: '생성 중', generate: 'LLM으로 생성', generateFailed: 'LLM 생성 실패' },
@@ -328,10 +306,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: 'Copiar texto de hoy',
     copied: 'Copiado',
     language: 'Idioma',
-    offlineReady: 'Caché sin conexión listo',
-    offlineNow: 'Sin conexión, sigue funcionando',
-    installApp: 'Instalar app',
-    runningAsApp: 'Ejecutando como app',
     business: { ...base.business, title: 'Datos del negocio', name: 'Nombre del negocio', industry: 'Sector', city: 'Ciudad / zona', avgPrice: 'Ticket medio', tone: 'Tono de marca', signatureItems: 'Productos estrella', presets: 'Ejemplos por sector', presetTitle: (industry) => `Usar ejemplo de ${industry}` },
     offer: { ...base.offer, title: 'Producto y promoción', name: 'Producto / servicio', price: 'Precio', discount: 'Promoción', sellingPoints: 'Puntos de venta', upload: 'Subir imagen', previewAlt: 'Vista previa' },
     llm: { ...base.llm, title: 'Método de generación', modeLabel: 'Método', template: 'Plantilla', setupHint: 'Introduce endpoint, modelo y clave. Usa ajustes avanzados solo para gateways especiales.', endpoint: 'Endpoint API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', advancedSettings: 'Ajustes avanzados', generating: 'Generando', generate: 'Generar con LLM', generateFailed: 'Falló la generación LLM' },
@@ -347,10 +321,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: 'Copier le texte du jour',
     copied: 'Copié',
     language: 'Langue',
-    offlineReady: 'Cache hors ligne prêt',
-    offlineNow: 'Hors ligne, encore utilisable',
-    installApp: "Installer l'app",
-    runningAsApp: 'Ouvert comme app',
     business: { ...base.business, title: 'Profil du commerce', name: 'Nom du commerce', industry: 'Secteur', city: 'Ville / quartier', avgPrice: 'Panier moyen', tone: 'Ton de marque', signatureItems: 'Produits phares', presets: 'Exemples sectoriels', presetTitle: (industry) => `Utiliser l'exemple ${industry}` },
     offer: { ...base.offer, title: 'Produit et offre', name: 'Produit / service', price: 'Prix', discount: 'Offre', sellingPoints: 'Arguments', upload: 'Ajouter une image', previewAlt: 'Aperçu produit' },
     llm: { ...base.llm, title: 'Méthode de génération', modeLabel: 'Méthode', template: 'Modèle', setupHint: 'Renseignez endpoint, modèle et clé. Ouvrez les réglages avancés seulement pour les passerelles spéciales.', endpoint: 'Endpoint API', model: 'Modèle', extraHeaders: 'Headers JSON personnalisés', advancedSettings: 'Réglages avancés', generating: 'Génération', generate: 'Générer avec LLM', generateFailed: 'Échec de génération LLM' },
@@ -366,10 +336,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: 'Heutigen Text kopieren',
     copied: 'Kopiert',
     language: 'Sprache',
-    offlineReady: 'Offline-Cache bereit',
-    offlineNow: 'Offline, weiter nutzbar',
-    installApp: 'App installieren',
-    runningAsApp: 'Läuft als App',
     business: { ...base.business, title: 'Geschäftsprofil', name: 'Name', industry: 'Branche', city: 'Stadt / Viertel', avgPrice: 'Durchschnittspreis', tone: 'Markenton', signatureItems: 'Top-Produkte', presets: 'Branchenbeispiele', presetTitle: (industry) => `${industry}-Beispiel nutzen` },
     offer: { ...base.offer, title: 'Produkt und Aktion', name: 'Produkt / Service', price: 'Preis', discount: 'Aktion', sellingPoints: 'Verkaufsargumente', upload: 'Produktbild hochladen', previewAlt: 'Produktvorschau' },
     llm: { ...base.llm, title: 'Generierungsmethode', modeLabel: 'Methode', template: 'Vorlage', setupHint: 'Endpunkt, Modell und Schlüssel reichen aus. Erweiterte Einstellungen nur für besondere Gateways öffnen.', endpoint: 'API-Endpunkt', model: 'Modell', extraHeaders: 'Eigene Header JSON', advancedSettings: 'Erweiterte Einstellungen', generating: 'Generiert', generate: 'Mit LLM generieren', generateFailed: 'LLM-Generierung fehlgeschlagen' },
@@ -385,10 +351,6 @@ export const translations: Record<LocaleCode, Translations> = {
     copyToday: 'Copiar post de hoje',
     copied: 'Copiado',
     language: 'Idioma',
-    offlineReady: 'Cache offline pronto',
-    offlineNow: 'Offline, ainda utilizável',
-    installApp: 'Instalar app',
-    runningAsApp: 'Rodando como app',
     business: { ...base.business, title: 'Perfil do negócio', name: 'Nome do negócio', industry: 'Setor', city: 'Cidade / bairro', avgPrice: 'Ticket médio', tone: 'Tom da marca', signatureItems: 'Produtos principais', presets: 'Exemplos por setor', presetTitle: (industry) => `Usar exemplo de ${industry}` },
     offer: { ...base.offer, title: 'Produto e promoção', name: 'Produto / serviço', price: 'Preço', discount: 'Promoção', sellingPoints: 'Diferenciais', upload: 'Enviar imagem', previewAlt: 'Prévia do produto' },
     llm: { ...base.llm, title: 'Método de geração', modeLabel: 'Método', template: 'Modelo', setupHint: 'Preencha endpoint, modelo e chave. Abra opções avançadas só para gateways especiais.', endpoint: 'Endpoint da API', model: 'Modelo', extraHeaders: 'Headers JSON personalizados', advancedSettings: 'Opções avançadas', generating: 'Gerando', generate: 'Gerar com LLM', generateFailed: 'Falha na geração LLM' },
@@ -406,10 +368,6 @@ export const translations: Record<LocaleCode, Translations> = {
     inputArea: 'منطقة الإدخال',
     outputArea: 'منطقة النتائج',
     language: 'اللغة',
-    offlineReady: 'يدعم التخزين دون اتصال',
-    offlineNow: 'غير متصل ويمكن المتابعة',
-    installApp: 'تثبيت التطبيق',
-    runningAsApp: 'يعمل كتطبيق',
     business: { ...base.business, title: 'بيانات المتجر', name: 'اسم المتجر', industry: 'النشاط', city: 'المدينة / الحي', avgPrice: 'متوسط السعر', tone: 'نبرة العلامة', signatureItems: 'المنتجات الرئيسية', presets: 'أمثلة الأنشطة', presetTitle: (industry) => `استخدم مثال ${industry}` },
     offer: { ...base.offer, title: 'المنتج والعرض', name: 'اسم المنتج / الخدمة', price: 'السعر', discount: 'العرض', sellingPoints: 'نقاط البيع', upload: 'رفع صورة المنتج', previewAlt: 'معاينة المنتج' },
     llm: { ...base.llm, title: 'طريقة التوليد', modeLabel: 'طريقة التوليد', template: 'قالب', setupHint: 'أدخل رابط API والنموذج والمفتاح. افتح الإعدادات المتقدمة فقط للبوابات الخاصة.', endpoint: 'رابط API', model: 'النموذج', extraHeaders: 'رؤوس مخصصة JSON', advancedSettings: 'إعدادات متقدمة', generating: 'جار التوليد', generate: 'توليد عبر LLM', generateFailed: 'فشل توليد LLM' },

@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.git/
 .netlify/
 work-npm-cache/
 .env
@@ -10,5 +11,3 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 coverage/
-.DS_Store
-Thumbs.db

@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  NODE_VERSION = "22.12.0"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -23,15 +26,3 @@
   for = "/icons/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/manifest.webmanifest"
-  [headers.values]
-    Content-Type = "application/manifest+json; charset=utf-8"
-    Cache-Control = "public, max-age=3600"
-
-[[headers]]
-  for = "/service-worker.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-    Cache-Control = "no-cache"

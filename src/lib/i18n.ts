@@ -49,6 +49,7 @@ export type Translations = {
     modeLabel: string;
     template: string;
     api: string;
+    templateHint: string;
     provider: string;
     providerCustom: string;
     providerDeepSeek: string;
@@ -169,6 +170,7 @@ const base: Translations = {
     modeLabel: '生成方式',
     template: '模板',
     api: 'LLM API',
+    templateHint: '本地模板库内置 12 套内容角度，并会按自然周自动轮换，离线也能生成新一周文案。',
     provider: 'API 提供商',
     providerCustom: '自定义兼容接口',
     providerDeepSeek: 'DeepSeek',
@@ -261,6 +263,7 @@ export const translations: Record<LocaleCode, Translations> = {
       title: 'Generation method',
       modeLabel: 'Generation method',
       template: 'Template',
+      templateHint: 'The local template bank includes 12 content angles and rotates automatically by calendar week, even offline.',
       provider: 'API provider',
       providerCustom: 'Custom compatible API',
       providerDeepSeek: 'DeepSeek',

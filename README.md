@@ -36,6 +36,10 @@
 
 线上部署通过 Netlify Function `/api/generate-content` 转发请求，避免浏览器跨域限制。
 
+### Local template rotation
+
+本地模板库内置 12 套内容角度，并按自然周自动轮换；同一周生成结果保持稳定，下一周会换一组表达方式，适合持续做朋友圈、小红书和短视频选题。
+
 ### LLM API providers
 
 页面内置三个选项：

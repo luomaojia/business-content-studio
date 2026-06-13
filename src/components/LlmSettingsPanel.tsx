@@ -80,6 +80,8 @@ export function LlmSettingsPanel({
         </button>
       </div>
 
+      {mode === 'template' && <p className="helperText">{t.llm.templateHint}</p>}
+
       {mode === 'llm' && (
         <>
           <p className="helperText">{t.llm.setupHint}</p>

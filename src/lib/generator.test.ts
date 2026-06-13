@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generateContentPack, serializeTextPack } from './generator';
+import { generateContentPack, localTemplateCount, serializeTextPack } from './generator';
 import type { BusinessProfile, Offer } from './types';
 
 const profile: BusinessProfile = {
@@ -20,6 +20,10 @@ const offer: Offer = {
 };
 
 describe('generateContentPack', () => {
+  it('keeps more than ten local templates available', () => {
+    expect(localTemplateCount).toBeGreaterThanOrEqual(10);
+  });
+
   it('generates seven complete days with local business details', () => {
     const pack = generateContentPack(profile, offer);
 
@@ -40,6 +44,15 @@ describe('generateContentPack', () => {
     expect(pack.calendar).toHaveLength(7);
     expect(pack.calendar[0].postBody).toContain('本地');
     expect(pack.calendar[0].postBody).toContain('到店咨询');
+  });
+
+  it('rotates local templates weekly while staying stable inside the same week', () => {
+    const weekOne = generateContentPack(profile, offer, 'zh-CN', { now: new Date('2026-06-15T10:00:00+08:00') });
+    const sameWeek = generateContentPack(profile, offer, 'zh-CN', { now: new Date('2026-06-18T10:00:00+08:00') });
+    const nextWeek = generateContentPack(profile, offer, 'zh-CN', { now: new Date('2026-06-22T10:00:00+08:00') });
+
+    expect(weekOne.calendar[0].title).toBe(sameWeek.calendar[0].title);
+    expect(weekOne.calendar[0].title).not.toBe(nextWeek.calendar[0].title);
   });
 });
 

@@ -43,6 +43,15 @@ export type GeneratedPack = {
   reviewReplies: ReviewReplies;
 };
 
+export type LlmSettings = {
+  endpoint: string;
+  model: string;
+  apiKey: string;
+  extraHeaders: string;
+};
+
+export type GenerationMode = 'template' | 'llm';
+
 export type IndustryPreset = {
   industry: Industry;
   exampleName: string;

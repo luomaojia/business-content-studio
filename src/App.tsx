@@ -4,13 +4,17 @@ import { AppInstallPrompt } from './components/AppInstallPrompt';
 import { BusinessForm } from './components/BusinessForm';
 import { ContentCalendar } from './components/ContentCalendar';
 import { ExportPanel } from './components/ExportPanel';
+import { LlmSettingsPanel } from './components/LlmSettingsPanel';
 import { OfferForm } from './components/OfferForm';
 import { ReviewReplyPanel } from './components/ReviewReplyPanel';
 import { generateContentPack } from './lib/generator';
+import { generateWithLlm } from './lib/llmClient';
 import { industryPresets } from './lib/presets';
-import type { BusinessProfile, Industry, Offer } from './lib/types';
+import type { BusinessProfile, GeneratedPack, GenerationMode, Industry, LlmSettings, Offer } from './lib/types';
 
 const storageKey = 'business-content-studio-state-v1';
+const llmStorageKey = 'business-content-studio-llm-settings-v1';
+const llmApiKeyStorageKey = 'business-content-studio-llm-api-key-v1';
 
 const defaultIndustry: Industry = '餐饮/夜宵店';
 const defaultPreset = industryPresets[defaultIndustry];
@@ -27,6 +31,13 @@ const defaultProfile: BusinessProfile = {
 const defaultOffer: Offer = {
   ...defaultPreset.offer,
   imagePreviewUrl: '',
+};
+
+const defaultLlmSettings: LlmSettings = {
+  endpoint: '',
+  model: '',
+  apiKey: '',
+  extraHeaders: '',
 };
 
 type SavedState = {
@@ -48,21 +59,52 @@ function loadSavedState(): SavedState {
   }
 }
 
+function loadLlmSettings(): LlmSettings {
+  try {
+    const saved = localStorage.getItem(llmStorageKey);
+    const parsed = saved ? (JSON.parse(saved) as Partial<LlmSettings>) : {};
+    return {
+      ...defaultLlmSettings,
+      ...parsed,
+      apiKey: sessionStorage.getItem(llmApiKeyStorageKey) || '',
+    };
+  } catch {
+    return defaultLlmSettings;
+  }
+}
+
 export default function App() {
   const [{ profile, offer }, setState] = useState<SavedState>(loadSavedState);
+  const [mode, setMode] = useState<GenerationMode>('template');
+  const [llmSettings, setLlmSettings] = useState<LlmSettings>(loadLlmSettings);
+  const [llmPack, setLlmPack] = useState<GeneratedPack | null>(null);
+  const [llmError, setLlmError] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
-  const pack = useMemo(() => generateContentPack(profile, offer), [profile, offer]);
+  const templatePack = useMemo(() => generateContentPack(profile, offer), [profile, offer]);
+  const pack = mode === 'llm' && llmPack ? llmPack : templatePack;
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify({ profile, offer }));
   }, [profile, offer]);
 
+  useEffect(() => {
+    const { apiKey, ...settingsWithoutKey } = llmSettings;
+    localStorage.setItem(llmStorageKey, JSON.stringify(settingsWithoutKey));
+    if (apiKey) sessionStorage.setItem(llmApiKeyStorageKey, apiKey);
+    else sessionStorage.removeItem(llmApiKeyStorageKey);
+  }, [llmSettings]);
+
   function setProfile(nextProfile: BusinessProfile) {
     setState((current) => ({ ...current, profile: nextProfile }));
+    setLlmPack(null);
+    setLlmError('');
   }
 
   function setOffer(nextOffer: Offer) {
     setState((current) => ({ ...current, offer: nextOffer }));
+    setLlmPack(null);
+    setLlmError('');
   }
 
   function usePreset(industry: Industry) {
@@ -81,6 +123,8 @@ export default function App() {
         imagePreviewUrl: offer.imagePreviewUrl,
       },
     });
+    setLlmPack(null);
+    setLlmError('');
   }
 
   async function copyText(text: string) {
@@ -92,6 +136,21 @@ export default function App() {
   function resetDemo() {
     localStorage.removeItem(storageKey);
     setState({ profile: defaultProfile, offer: defaultOffer });
+    setLlmPack(null);
+    setLlmError('');
+  }
+
+  async function generateLlmPack() {
+    setIsGenerating(true);
+    setLlmError('');
+    try {
+      const result = await generateWithLlm(profile, offer, llmSettings);
+      setLlmPack(result.pack);
+    } catch (error) {
+      setLlmError(error instanceof Error ? error.message : 'LLM 生成失败');
+    } finally {
+      setIsGenerating(false);
+    }
   }
 
   return (
@@ -125,6 +184,15 @@ export default function App() {
           <AppInstallPrompt />
           <BusinessForm profile={profile} onChange={setProfile} onUsePreset={usePreset} />
           <OfferForm offer={offer} onChange={setOffer} />
+          <LlmSettingsPanel
+            mode={mode}
+            settings={llmSettings}
+            isGenerating={isGenerating}
+            error={llmError}
+            onModeChange={setMode}
+            onSettingsChange={setLlmSettings}
+            onGenerate={generateLlmPack}
+          />
         </aside>
 
         <section className="outputColumn" aria-label="结果区">

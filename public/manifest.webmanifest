@@ -1,0 +1,36 @@
+{
+  "name": "本地小商家内容工作台",
+  "short_name": "内容工作台",
+  "description": "为本地小商家生成一周社媒内容、短视频脚本、点评回复和导出内容包。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f7f3",
+  "theme_color": "#28664f",
+  "lang": "zh-CN",
+  "categories": ["business", "productivity", "marketing"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "打开内容日历",
+      "short_name": "内容日历",
+      "description": "快速进入一周发布内容。",
+      "url": "/#calendar-heading",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

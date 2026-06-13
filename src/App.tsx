@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Store, WandSparkles } from 'lucide-react';
+import { AppInstallPrompt } from './components/AppInstallPrompt';
 import { BusinessForm } from './components/BusinessForm';
 import { ContentCalendar } from './components/ContentCalendar';
 import { ExportPanel } from './components/ExportPanel';
@@ -121,6 +122,7 @@ export default function App() {
 
       <div className="appShell">
         <aside className="inputColumn" aria-label="输入区">
+          <AppInstallPrompt />
           <BusinessForm profile={profile} onChange={setProfile} onUsePreset={usePreset} />
           <OfferForm offer={offer} onChange={setOffer} />
         </aside>

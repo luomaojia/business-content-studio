@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="本地小商家内容工作台">
+  <rect width="512" height="512" rx="96" fill="#28664f"/>
+  <path d="M126 198h260l-24-64H150l-24 64Z" fill="#fff8ef"/>
+  <path d="M144 206h224v166a22 22 0 0 1-22 22H166a22 22 0 0 1-22-22V206Z" fill="#f4efe4"/>
+  <path d="M128 198h256v42c0 22-18 40-40 40-15 0-28-8-35-20-7 12-20 20-35 20s-28-8-35-20c-7 12-20 20-35 20s-28-8-35-20c-7 12-20 20-35 20-22 0-40-18-40-40v-42Z" fill="#e66a2f"/>
+  <path d="M188 316h82v78h-82z" fill="#28664f"/>
+  <path d="M296 314h48v44h-48z" fill="#ffffff"/>
+  <path d="M168 132h176" stroke="#ffffff" stroke-width="22" stroke-linecap="round"/>
+  <path d="M198 352h38" stroke="#fff8ef" stroke-width="14" stroke-linecap="round"/>
+</svg>

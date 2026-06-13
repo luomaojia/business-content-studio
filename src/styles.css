@@ -144,6 +144,7 @@ h3 {
 }
 
 .panel,
+.appStatusStrip,
 .exportBar,
 .contentCard,
 .replyCard {
@@ -157,6 +158,37 @@ h3 {
   display: grid;
   gap: 14px;
   padding: 16px;
+}
+
+.appStatusStrip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+}
+
+.appStatusStrip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  color: #234d3f;
+  background: #eef6f1;
+  border: 1px solid rgba(40, 102, 79, 0.1);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.84rem;
+  font-weight: 850;
+}
+
+.appStatusStrip .offlineState {
+  color: #7a3f22;
+  background: #fff3ea;
+}
+
+.compactButton {
+  grid-column: 1 / -1;
+  min-height: 36px;
 }
 
 .panelHeader {
@@ -488,7 +520,8 @@ textarea:focus {
   .inputColumn,
   .calendarGrid,
   .replyGrid,
-  .fieldGrid {
+  .fieldGrid,
+  .appStatusStrip {
     grid-template-columns: 1fr;
   }
 }

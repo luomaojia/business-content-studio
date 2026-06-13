@@ -9,6 +9,7 @@
 - 短视频脚本
 - 点评回复模板
 - TXT 和 JSON 内容包导出
+- 可安装到桌面的 PWA App
 
 ## 技术栈
 
@@ -17,6 +18,8 @@
 - TypeScript
 - Vitest
 - localStorage
+- Web App Manifest
+- Service Worker
 
 ## 本地运行
 
@@ -26,6 +29,17 @@ npm run dev
 ```
 
 打开 `http://127.0.0.1:5173/`。
+
+## 作为 App 安装
+
+生产构建后，应用会注册 service worker 并提供浏览器安装入口：
+
+```bash
+npm run build
+npm run preview
+```
+
+打开预览地址后，可在 Chrome、Edge 或 Android 浏览器中选择“安装应用”或“添加到主屏幕”。安装后应用会以独立窗口运行，并缓存核心页面，断网时仍可打开已缓存的工作台。
 
 ## 验证
 
